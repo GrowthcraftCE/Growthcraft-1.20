@@ -55,9 +55,13 @@ public class GrowthcraftCoreBlockTags extends BlockTagsProvider {
 		
 		tag(GrowthcraftTags.Blocks.HEATSOURCES)
 		.add(Blocks.LAVA)
-		.add(Blocks.FIRE)
 		.add(Blocks.MAGMA_BLOCK)
-		.add(Blocks.CAMPFIRE);
+		.add(TagEntry.optionalElement(new ResourceLocation("farmersdelight", "stove")))
+		.add(TagEntry.optionalElement(new ResourceLocation("decorative_blocks", "bonfire")))
+		.add(TagEntry.optionalElement(new ResourceLocation("decorative_blocks", "brazier")))  // would have liked to support additional_lights but their firepits aren't tagged and there's a ton of them.
+		.add(TagEntry.tag(BlockTags.CAMPFIRES.location()))
+		.add(TagEntry.tag(BlockTags.FIRE.location()));
+
 		tag(GrowthcraftTags.Blocks.ROPE)
 		.add(GrowthcraftBlocks.ROPE_LINEN.get())
 		.add(GrowthcraftBlocks.ROPE_LINEN_ACACIA_FENCE.get())
