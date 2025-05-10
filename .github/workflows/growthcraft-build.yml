@@ -12,45 +12,39 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'adopt'
           java-version: 17
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
       - name: Setup Gradle
         run: chmod +x gradlew
       - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew build --info
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonar --info
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: build/libs/
-  sonarqube:
-    name: SonarQube
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  
-      - name: SonarQubeScan
-        uses: SonarSource/sonarqube-scan-action@v4
-        env: 
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   release:
     name: Release
     runs-on: ubuntu-latest

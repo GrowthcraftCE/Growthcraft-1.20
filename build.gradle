@@ -3,7 +3,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id "org.sonarqube" version "4.3.0.3225"
+    id "org.sonarqube" version "6.0.1.5171"
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
@@ -15,11 +15,11 @@ base {
 }
 
 sonar {
-    properties {
-        property "sonar.projectKey", "GrowthcraftCE_Growthcraft-1.20"
-        property "sonar.organization", "growthcraftce"
-        property "sonar.host.url", "https://sonarcloud.io"
-    }
+  properties {
+    property "sonar.projectKey", "GrowthcraftCE_Growthcraft-1.20"
+    property "sonar.organization", "growthcraftce"
+    property "sonar.host.url", "https://sonarcloud.io"
+  }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
