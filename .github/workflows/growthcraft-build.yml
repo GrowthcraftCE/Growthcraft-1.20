@@ -29,12 +29,20 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: |
+            ${{ runner.os }}-sonar
       - name: Setup Gradle
         run: chmod +x gradlew
       - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew build --info
+        run: ./gradlew build sonar --info
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
