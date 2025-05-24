@@ -37,6 +37,5 @@ public class GrowthcraftMilkItemTagsProvider extends ItemTagsProvider
 		tag(GrowthcraftMilkTags.Items.CHEESE_SLICES).add(GrowthcraftMilkItems.CHEESE_MONTEREY_SLICE.get());
 		tag(GrowthcraftMilkTags.Items.CHEESE_SLICES).add(GrowthcraftMilkItems.CHEESE_PARMESAN_SLICE.get());
 		tag(GrowthcraftMilkTags.Items.CHEESE_SLICES).add(GrowthcraftMilkItems.CHEESE_PROVOLONE_SLICE.get());
-		tag(GrowthcraftMilkTags.Items.CHEESE_SLICES).add(GrowthcraftMilkItems.CHEESE_RICOTTA_SLICE.get());
 	}
 }

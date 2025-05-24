@@ -13,5 +13,11 @@
     "item": "growthcraft_milk:butter",
     "count": 1
   },
-  "by_product_chance": 100
+  "by_product_chance": 100,
+  "conditions": [
+    {
+      "type": "growthcraft:feature_enabled",
+      "feature": "milk"
+    }
+  ]
 }

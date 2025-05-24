@@ -117,5 +117,19 @@
   "jei.growthcraft_milk.category.cheese_press": "Выжимка",
   "jei.growthcraft_milk.category.pancheon": "Большая миска для простокваши",
   "jei.growthcraft_milk.category.churn": "Маслобойка",
-  "jei.growthcraft_milk.category.mixing_vat": "Смесительный бак"
+  "jei.growthcraft_milk.category.mixing_vat": "Смесительный бак",
+  "emi.category.growthcraft_milk.pancheon": "Fluid separation",
+  "emi.category.growthcraft_milk.drying": "Draining the curds",
+  "emi.caption.growthcraft_milk.drying1": "Hang onto the ceiling",
+  "emi.caption.growthcraft_milk.drying2": "        ...and wait.",
+  "emi.category.growthcraft_milk.churn": "Churning",
+  "emi.category.growthcraft_milk.cheese_press": "Pressing",
+  "emi.category.growthcraft_milk.mixing_vat_1": "Mixing",
+  "emi.category.growthcraft_milk.mixing_vat_2": "Mixing",
+  "emi.caption.growthcraft_milk.mixing_vat_starter": "Start mixing using ",
+  "emi.caption.growthcraft_milk.mixing_vat_collector": "Collect result using ",
+  "emi.caption.growthcraft_milk.mixing_vat_additions": "Additions: ",
+  "emi.category.growthcraft_milk.aging": "Aging",
+  "message.growthcraft_milk.get_using_item": "Collect contents using %s.",
+  "message.growthcraft_milk.get_using_item_empty_hand": "empty hand"
 }

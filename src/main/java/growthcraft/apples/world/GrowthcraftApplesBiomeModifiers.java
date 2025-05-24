@@ -1,5 +1,7 @@
 package growthcraft.apples.world;
 
+import static net.minecraft.world.level.levelgen.GenerationStep.Decoration.VEGETAL_DECORATION;
+
 import growthcraft.apples.init.GrowthcraftApplesTags;
 import growthcraft.apples.shared.Reference;
 import net.minecraft.core.HolderSet;
@@ -7,7 +9,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -26,8 +27,8 @@ public class GrowthcraftApplesBiomeModifiers {
         
         context.register(ADD_APPLE_TREE, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
                 biomes.getOrThrow(GrowthcraftApplesTags.Biomes.HAS_APPLE_TREE),
-                HolderSet.direct(placedFeatures.getOrThrow(GrowthcraftApplesPlacedFeatures.APPLE_TREE_PLACED_KEY)),
-                GenerationStep.Decoration.VEGETAL_DECORATION));
+                HolderSet.direct(placedFeatures.getOrThrow(GrowthcraftApplesFeatures.Placed.TREES_APPLE_PLACED)),
+                VEGETAL_DECORATION));
     }
 	
     private static ResourceKey<BiomeModifier> registerKey(String name) {

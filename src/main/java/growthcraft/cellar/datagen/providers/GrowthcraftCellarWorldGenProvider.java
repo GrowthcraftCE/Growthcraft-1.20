@@ -5,8 +5,7 @@ import java.util.concurrent.CompletableFuture;
 
 import growthcraft.cellar.shared.Reference;
 import growthcraft.cellar.world.GrowthcraftCellarBiomeModifiers;
-import growthcraft.cellar.world.GrowthcraftCellarConfiguredFeatures;
-import growthcraft.cellar.world.GrowthcraftCellarPlacedFeatures;
+import growthcraft.cellar.world.GrowthcraftCellarFeatures;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
@@ -16,8 +15,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class GrowthcraftCellarWorldGenProvider extends DatapackBuiltinEntriesProvider{
 	public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
-			.add(Registries.CONFIGURED_FEATURE, GrowthcraftCellarConfiguredFeatures::bootstrap)
-			.add(Registries.PLACED_FEATURE, GrowthcraftCellarPlacedFeatures::bootstrap)
+			.add(Registries.CONFIGURED_FEATURE, GrowthcraftCellarFeatures.Configured::init)
+			.add(Registries.PLACED_FEATURE, GrowthcraftCellarFeatures.Placed::init)
 			.add(ForgeRegistries.Keys.BIOME_MODIFIERS, GrowthcraftCellarBiomeModifiers::bootstrap);
 	
 	public GrowthcraftCellarWorldGenProvider(PackOutput output, CompletableFuture<Provider> registries) {

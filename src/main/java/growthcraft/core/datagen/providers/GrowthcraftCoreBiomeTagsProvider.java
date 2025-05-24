@@ -26,8 +26,9 @@ public class GrowthcraftCoreBiomeTagsProvider extends BiomeTagsProvider{
     protected void addTags(HolderLookup.Provider provider) {
     	tag(GrowthcraftCellarTags.Biomes.HAS_CORK_TREE)
     	.add(Biomes.DARK_FOREST)
-    	.add(Biomes.MEADOW)
     	.add(TagEntry.optionalElement(new ResourceLocation("farmersdelight", "stove")));
+    	tag(GrowthcraftCellarTags.Biomes.HAS_CORK_TREE_RARE)
+    	.add(Biomes.MEADOW);
     	tag(GrowthcraftApplesTags.Biomes.HAS_APPLE_TREE)
     	.add(Biomes.FOREST)
     	.add(Biomes.PLAINS)

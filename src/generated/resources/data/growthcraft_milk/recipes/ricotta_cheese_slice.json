@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "conditions": [
+    {
+      "type": "growthcraft:feature_enabled",
+      "feature": "milk"
+    }
+  ],
+  "group": "growthcraft_milk",
+  "ingredients": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "growthcraft_milk:ricotta_cheese_curds_drained"
+    },
+    {
+      "item": "growthcraft_milk:ricotta_cheese_curds_drained"
+    }
+  ],
+  "result": {
+    "item": "growthcraft_milk:ricotta_cheese_slice"
+  }
+}

@@ -8,6 +8,10 @@
     {
       "type": "mysticalagriculture:crop_enabled",
       "crop": "mysticalagriculture:nature"
+    },
+    {
+      "type": "growthcraft:feature_enabled",
+      "feature": "milk"
     }
   ],
   "pattern": [

@@ -15,6 +15,10 @@ public class GrowthcraftApplesConfig {
     public static final String SERVER_CONFIG = "growthcraft-apples-server.toml";
 
     private static ForgeConfigSpec.BooleanValue moduleEnabled;
+    private static ForgeConfigSpec.IntValue appleCheckArea;
+    private static ForgeConfigSpec.IntValue maxAppleInArea;
+    
+    private static final String CATEGORY_APPLE = "apple";
 
     static {
         initServerConfig(SERVER_BUILDER);
@@ -43,6 +47,14 @@ public class GrowthcraftApplesConfig {
                 .comment("This master-switch lets you disable the Apples module - currently just apple trees and wooden blocks. Apples themselves or apple cider are not affected.")
                 .define("module_enabled", true);
         builder.pop();  // master_switch
+        
+        appleCheckArea = builder
+        		.comment("Size of area, in which apples can grow on an apple tree. Default: 3 Range 1-10")
+        		.defineInRange(String.format("%s.%s", CATEGORY_APPLE, "appleCheckArea"), 3, 1, 10);
+        
+        maxAppleInArea = builder
+        		.comment("amount of apples that can grow in a given area. Default: 2, Range 1-10")
+        		.defineInRange(String.format("%s.%s", CATEGORY_APPLE, "maxAppleInArea"), 2, 1, 10);
     }
 
     ////////////////////////////////////////////////////////
@@ -50,5 +62,13 @@ public class GrowthcraftApplesConfig {
     public static Boolean getModuleEnabled()
     {
         return moduleEnabled.get();
+    }
+    
+    public static int getAppleCheckArea() {
+    	return appleCheckArea.get();
+    }
+    
+    public static int getMaxAppleInArea() {
+    	return maxAppleInArea.get();
     }
 }

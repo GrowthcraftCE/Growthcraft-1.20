@@ -2,16 +2,20 @@ package growthcraft.milk.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import growthcraft.lib.kaupenjoe.screen.renderer.FluidTankRenderer;
+import growthcraft.milk.block.entity.MixingVatBlockEntity;
 import growthcraft.milk.screen.container.MixingVatMenu;
 import growthcraft.milk.shared.Reference;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
+import java.util.List;
 import java.util.Optional;
 
 public class MixingVatScreen extends AbstractContainerScreen<MixingVatMenu> {
@@ -118,4 +122,27 @@ public class MixingVatScreen extends AbstractContainerScreen<MixingVatMenu> {
     private boolean isMouseAboveArea(int mouseX, int mouseY, int baseX, int baseY, int offsetX, int offsetY, int width, int height) {
         return (mouseX >= baseX && mouseX <= (baseX + offsetX)) && (mouseY >= baseY && mouseY <= (baseY + offsetY));
     }
+
+    @Override
+    protected void renderTooltip(GuiGraphics pGuiGraphics, int pX, int pY) {
+        if (this.menu.getCarried().isEmpty() && this.hoveredSlot != null && this.hoveredSlot.getSlotIndex() == 3 && this.hoveredSlot.hasItem()) {
+            // result slot
+            ItemStack resultItemStack = this.hoveredSlot.getItem();
+            List<Component> tooltipLines = this.getTooltipFromContainerItem(resultItemStack);
+            if (this.lastResultItem != resultItemStack.hashCode()) {
+                ItemStack finalizerItem = ((MixingVatBlockEntity) this.getMenu().getBlockEntity()).getResultActivationTool();
+                Component finalizerText = finalizerItem.isEmpty() ? Component.translatable("message.growthcraft_milk.get_using_item_empty_hand").withStyle(Style.EMPTY.withColor(0xffffff88)) : finalizerItem.getHoverName().copy().withStyle(Style.EMPTY.withColor(0xffffff88));
+                this.lastComponent = Component.translatable("message.growthcraft_milk.get_using_item", finalizerText).withStyle(Style.EMPTY.withColor(0xffddbb44));
+                this.lastResultItem = resultItemStack.hashCode();
+            }
+            tooltipLines.add(this.lastComponent);
+            pGuiGraphics.renderTooltip(this.font, tooltipLines, resultItemStack.getTooltipImage(), resultItemStack, pX, pY);
+        }
+        else {
+            // not a result slot
+            super.renderTooltip(pGuiGraphics, pX, pY);
+        }
+    }
+    private int lastResultItem = 0;
+    private Component lastComponent = null;
 }

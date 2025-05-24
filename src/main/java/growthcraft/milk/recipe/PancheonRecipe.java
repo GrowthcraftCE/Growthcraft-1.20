@@ -67,8 +67,14 @@ public class PancheonRecipe implements Recipe<SimpleContainer> {
         return this.getFluidStack(OUTPUT_0).getFluid().getBucket().getDefaultInstance();
     }
 
-    public List<FluidStack> getResultFluidStacks() {
-       return Arrays.asList(this.getFluidStack(OUTPUT_0).copy(), this.getFluidStack(OUTPUT_1).copy());
+    public FluidStack getOutput1() {
+       return this.getFluidStack(OUTPUT_0).copy();
+    }
+    public FluidStack getOutput2() {
+       return this.getFluidStack(OUTPUT_1).copy();
+    }
+    public FluidStack getInput() {
+       return this.getFluidStack(INPUT_0).copy();
     }
 
     @Override

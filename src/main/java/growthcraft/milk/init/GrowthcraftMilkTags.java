@@ -44,9 +44,7 @@ public class GrowthcraftMilkTags {
         public static final TagKey<Item> GC_WAX = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation("growthcraft_apiary:bees_wax"));
         public static final TagKey<Item> CHEESE_SLICES = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation("growthcraft_milk:cheese_slices"));
 
-        public static final TagKey<Item> TAG_MIXING_VAT_TOOLS = tag(Reference.UnlocalizedName.TAG_MIXING_VAT_TOOLS);
         public static final TagKey<Item> TAG_MILK_BUCKETS = tag(Reference.UnlocalizedName.TAG_MILK_BUCKETS);
-        public static final TagKey<Item> TAG_MILKABLE = tag(Reference.UnlocalizedName.TAG_MILKABLE);
 
         private static TagKey<Item> tag(String name) {
             return ItemTags.create(new ResourceLocation(Reference.MODID, name));

@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,6 +59,22 @@ public class ThistleCropBlock extends CropBlock {
     @Override
     protected @NotNull ItemLike getBaseSeedId() {
         return GrowthcraftMilkItems.THISTLE_SEED.get();
+    }
+
+    /**
+     * Overrides the getShape method from CropBlock to dynamically adjust the crop's shape
+     * based on its growth stage. This is necessary because SHAPE_BY_AGE is private in the
+     * parent class, preventing direct access.
+     *
+     * @param blockState The current state of the block.
+     * @param blockGetter The block access environment.
+     * @param blockPos The position of the block in the world.
+     * @param context The collision context, used for interaction checks.
+     * @return The corresponding VoxelShape for the crop's current age.
+     */
+    @Override
+    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext context) {
+        return SHAPE_BY_AGE[this.getAge(blockState)];
     }
 
     @Override

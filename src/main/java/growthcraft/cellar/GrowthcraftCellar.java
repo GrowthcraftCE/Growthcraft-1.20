@@ -1,5 +1,7 @@
 package growthcraft.cellar;
 
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,6 +49,7 @@ public class GrowthcraftCellar {
         modEventBus.addListener(this::clientSetupEvent);
         modEventBus.addListener(this::buildCreativeTabContents);
         modEventBus.addListener(this::onRegisterRenderers);
+        modEventBus.addListener(this::enqueueIMC);
 
         // Config
         GrowthcraftCellarConfig.loadConfig();
@@ -108,6 +111,12 @@ public class GrowthcraftCellar {
                 }
             });
         }
+    }
+
+    //// support for CarryOn, etc.
+    private void enqueueIMC(final InterModEnqueueEvent event) {
+        InterModComms.sendTo("carryon", "blacklistBlock", () -> Reference.MODID + ":" + Reference.UnlocalizedName.FRUIT_PRESS);
+        InterModComms.sendTo("carryon", "blacklistBlock", () -> Reference.MODID + ":" + Reference.UnlocalizedName.FRUIT_PRESS_PISTON);
     }
 
     @SubscribeEvent

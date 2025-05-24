@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:random_selector",
+  "config": {
+    "default": "growthcraft_apples:apple_tree",
+    "features": [
+      {
+        "chance": 0.25,
+        "feature": "growthcraft_apples:big_apple_tree"
+      }
+    ]
+  }
+}

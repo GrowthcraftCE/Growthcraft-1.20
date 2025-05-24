@@ -19,28 +19,29 @@ public class LivingDropLootModifier {
         LivingEntity entity = event.getEntity();
         Level level = entity.level();
 
-        if(!level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+        if (!level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
             return;
         }
 
-        if(entity instanceof Cow) {
+        if (entity instanceof Cow) {
             onCowLivingDrops(event, entity);
         }
-
     }
 
     private void onCowLivingDrops(LivingDropsEvent event, LivingEntity cow) {
-        Collection<ItemEntity> drops = event.getDrops();
-        int chance = GrowthcraftMilkConfig.getStomachLootChance();
-
-        if(GrowthcraftMilkConfig.isStomachLootingEnabled() && new SecureRandom().nextInt(100) <= chance) {
-            drops.add(
-                    new ItemEntity(
-                        event.getEntity().level(),
-                        cow.getX(), cow.getY(), cow.getZ(),
-                        new ItemStack(GrowthcraftMilkItems.STOMACH.get())
-                    )
-            );
+        if (GrowthcraftMilkConfig.getModuleEnabled() && GrowthcraftMilkConfig.isStomachLootingEnabled())
+        {
+            int chance = GrowthcraftMilkConfig.getStomachLootChance();
+            if (event.getEntity().level().getRandom().nextInt(100) <= chance)
+            {
+                event.getDrops().add(
+                        new ItemEntity(
+                                event.getEntity().level(),
+                                cow.getX(), cow.getY(), cow.getZ(),
+                                new ItemStack(GrowthcraftMilkItems.STOMACH.get())
+                        )
+                );
+            }
         }
     }
 }

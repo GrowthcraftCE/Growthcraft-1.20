@@ -1,6 +1,6 @@
 {
   "type": "forge:add_features",
   "biomes": "#growthcraft_cellar:has_cork_tree",
-  "features": "growthcraft_cellar:cork_tree_placed",
+  "features": "growthcraft_cellar:trees_cork",
   "step": "vegetal_decoration"
 }

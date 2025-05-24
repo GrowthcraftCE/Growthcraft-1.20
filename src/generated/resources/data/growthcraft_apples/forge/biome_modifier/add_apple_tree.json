@@ -1,6 +1,6 @@
 {
   "type": "forge:add_features",
   "biomes": "#growthcraft_apples:has_apple_tree",
-  "features": "growthcraft_apples:apple_tree_placed",
+  "features": "growthcraft_apples:trees_apple",
   "step": "vegetal_decoration"
 }

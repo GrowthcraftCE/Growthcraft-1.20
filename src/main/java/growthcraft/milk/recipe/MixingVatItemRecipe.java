@@ -48,9 +48,9 @@ public class MixingVatItemRecipe implements Recipe<SimpleContainer> {
         this.inputFluidStack = inputFluidStack;
         this.ingredients = ingredients;
         this.processingTime = processingTime;
-        this.resultItemStack = resultItemStack;
-        this.activationTool = activationTool;
-        this.resultActivationTool = resultActivationTool;
+        this.resultItemStack = resultItemStack.copy();
+        this.activationTool = activationTool.copy();
+        this.resultActivationTool = resultActivationTool.copy();
         this.requiresHeat = requiresHeat;
     }
 
@@ -69,30 +69,35 @@ public class MixingVatItemRecipe implements Recipe<SimpleContainer> {
      * @return {@code true} if the test criteria match the recipe criteria, {@code false} otherwise.
      */
     public boolean matches(FluidStack testFluidStack, List<ItemStack> testIngredients, boolean hasHeatSource) {
-
-        boolean fluidMatches = CraftingUtils.doesFluidMatch(testFluidStack, this.getInputFluidStack());
-
-        boolean ingredientMatches = false;
-
-        if (this.getIngredients().size() == testIngredients.size()) {
-            int itemCount = this.getIngredientList().size();
-            int matchCount = 0;
-            for (int i = 0; i < this.getIngredientList().size(); i++) {
-                int index = i;
-                boolean ingredientMatch = Arrays.stream(
-                        this.getIngredients().get(index).getItems()).anyMatch(
-                        ingredientItem -> ingredientItem.is(testIngredients.get(index).getItem())
-                                && ingredientItem.getCount() == testIngredients.get(index).getCount()
-                );
-
-                if (ingredientMatch) {
-                    matchCount++;
-                }
-            }
-            ingredientMatches = itemCount == matchCount;
+        // Check if the input fluid matches the required fluid
+        if (!CraftingUtils.doesFluidMatch(testFluidStack, getInputFluidStack())) {
+            return false;
         }
 
-        return fluidMatches && ingredientMatches && hasHeatSource == isHeatRequired();
+        List<Ingredient> requiredIngredients = getIngredients();
+
+        // If the number of test ingredients doesn't match the recipe, it's not a match
+        if (requiredIngredients.size() != testIngredients.size()) {
+            return false;
+        }
+
+        // Compare each ingredient slot by slot
+        for (int i = 0; i < requiredIngredients.size(); i++) {
+            Ingredient required = requiredIngredients.get(i);
+            ItemStack testItem = testIngredients.get(i);
+
+            // Check if the test item matches any of the items in the ingredient, including count
+            boolean match = Arrays.stream(required.getItems())
+                    .anyMatch(item -> item.is(testItem.getItem()) && item.getCount() == testItem.getCount());
+
+            // If any ingredient doesn't match, the whole recipe doesn't match
+            if (!match) {
+                return false;
+            }
+        }
+
+        // Finally, check if the heat source requirement is satisfied
+        return hasHeatSource == isHeatRequired();
     }
 
     public boolean matchResult(ItemStack itemStack) {
@@ -116,10 +121,6 @@ public class MixingVatItemRecipe implements Recipe<SimpleContainer> {
         return this.ingredients;
     }
 
-    public List<ItemStack> getIngredientList() {
-        return Arrays.stream(ingredients.get(0).getItems()).toList();
-    }
-
     public ItemStack getResultItemStack() {
         return this.resultItemStack.copy();
     }
@@ -127,7 +128,6 @@ public class MixingVatItemRecipe implements Recipe<SimpleContainer> {
     public ItemStack getResultActivationTool() {
         return this.resultActivationTool;
     }
-
 
     @Override
     public ItemStack assemble(SimpleContainer container, RegistryAccess registryAccess) {

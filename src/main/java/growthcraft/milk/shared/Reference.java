@@ -72,7 +72,6 @@ public class Reference {
         public static final String SKIM_MILK = "skim_milk";
         public static final String STARTER_CULTURE = "starter_culture";
         public static final String STOMACH = "stomach";
-        public static final String STRUCTURE_FROMAGE_PLAINS = "fromage_plains";
         public static final String THISTLE = "thistle";
         public static final String THISTLE_CROP = "thistle_crop";
         public static final String THISTLE_SEED = "thistle_seed";
@@ -86,7 +85,6 @@ public class Reference {
         public static final String YOGURT_PLAIN = "yogurt_plain";
         public static final String YOGURT_PUMPKIN = "yogurt_pumpkin";
         public static final String YOGURT_WATERMELON = "yogurt_watermelon";
-        public static final String TAG_MIXING_VAT_TOOLS = "mixing_vat_tools";
 		public static final String TAG_MILK_BUCKETS = "milk_buckets";
 		public static final String TAG_MILKABLE = "milkable";
 

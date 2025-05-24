@@ -148,6 +148,15 @@ public class GrowthcraftCoreBlockTags extends BlockTagsProvider {
 		.add(GrowthcraftBlocks.SALT_ORE_DEEPSLATE.get())
 		.add(GrowthcraftBlocks.SALT_ORE_END.get())
 		.add(GrowthcraftBlocks.SALT_ORE_NETHER.get());
+		tag(BlockTags.LOGS_THAT_BURN)
+		.add(GrowthcraftApplesBlocks.APPLE_WOOD_LOG.get())
+		.add(GrowthcraftApplesBlocks.APPLE_WOOD_LOG_STRIPPED.get())
+		.add(GrowthcraftApplesBlocks.APPLE_WOOD.get())
+		.add(GrowthcraftApplesBlocks.APPLE_WOOD_STRIPPED.get())
+		.add(GrowthcraftCellarBlocks.CORK_WOOD_LOG.get())
+		.add(GrowthcraftCellarBlocks.CORK_WOOD_LOG_STRIPPED.get())
+		.add(GrowthcraftCellarBlocks.CORK_WOOD.get())
+		.add(GrowthcraftCellarBlocks.CORK_WOOD_STRIPPED.get());
 		
 		//Forge Tags
 		tag(Tags.Blocks.ORES)

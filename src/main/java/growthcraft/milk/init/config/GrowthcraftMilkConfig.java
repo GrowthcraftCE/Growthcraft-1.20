@@ -1,11 +1,12 @@
 package growthcraft.milk.init.config;
 
+import java.io.File;
+
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.loading.FMLPaths;
-
-import java.io.File;
 
 public class GrowthcraftMilkConfig {
 
@@ -21,6 +22,9 @@ public class GrowthcraftMilkConfig {
     private static final String CATEGORY_WORLDGEN = "worldgen";
     private static final String CATEGORY_CHEESE = "cheese";
 
+    private static ForgeConfigSpec.BooleanValue moduleEnabled;
+    private static ForgeConfigSpec.BooleanValue featureEnabledBeverages;
+
     private static ForgeConfigSpec.BooleanValue churnGuiEnabled;
     private static ForgeConfigSpec.BooleanValue mixingVatGuiEnabled;
     private static ForgeConfigSpec.BooleanValue mixingVatDebugEnabled;
@@ -29,9 +33,7 @@ public class GrowthcraftMilkConfig {
     private static ForgeConfigSpec.BooleanValue pancheonGuiEnabled;
     private static ForgeConfigSpec.BooleanValue stomachLootEnabled;
     private static ForgeConfigSpec.IntValue stomachLootChance;
-
-    private static ForgeConfigSpec.BooleanValue villageStructuresEnabled;
-    private static ForgeConfigSpec.IntValue villageStructuresWeight;
+    private static ForgeConfigSpec.IntValue cheeseAgeTime;
 
     private static ForgeConfigSpec.BooleanValue cheeseDebugEnabled;
 
@@ -57,6 +59,15 @@ public class GrowthcraftMilkConfig {
     }
 
     public static void initServerConfig(ForgeConfigSpec.Builder specBuilder) {
+        // best config flag here....
+        moduleEnabled = specBuilder
+                .comment("This master-switch lets you disable the entire Rice module - seeds dropping from grass, farming tool and products.")
+                .define("_master_switch_.module_enabled", true);
+        featureEnabledBeverages = specBuilder
+                .comment("In case master-switch is turned off, this exception allows you to still make beverages from this module's fluids.")
+                .define("_master_switch_.feature_exception_beverages", true);
+        // good stuff done
+
         // Init Server Side Configuration
         churnGuiEnabled = specBuilder
                 .comment("Set to true to allow users to access the Churn GUI.")
@@ -81,16 +92,13 @@ public class GrowthcraftMilkConfig {
                 .comment("Chance to loot a stomach from a cow. stomachLootEnabled must be set to true.")
                 .defineInRange(String.format("%s.%s", CATEGORY_LOOT_CHANCES, "stomachLootChance"), 5, 0, 100);
 
-        villageStructuresEnabled = specBuilder
-                .comment("Enable generation of Growthcraft Milk village structures.")
-                .define(String.format("%s.%s", CATEGORY_WORLDGEN, "villageStructuresEnabled"), false);
-        villageStructuresWeight = specBuilder
-                .comment("The weight of the villager structures.")
-                .defineInRange(String.format("%s.%s", CATEGORY_WORLDGEN, "villageStructuresWeight"), 1, 0, 16000);
-
         cheeseDebugEnabled = specBuilder
                 .comment("Set to true to add additional logging to debug the cheese wheel and curds blocks.")
                 .define(String.format("%s.%s", CATEGORY_CHEESE, "debugEnabled"), false);
+        
+        cheeseAgeTime = specBuilder
+		        .comment("Amount of random ticks it takes, for a cheese wheel to age. One random tick happens every ~1min.")
+		        .defineInRange(String.format("%s.%s", CATEGORY_CHEESE, "cheeseAgeTime"), 60, 0, 240);
 
     }
 
@@ -165,14 +173,6 @@ public class GrowthcraftMilkConfig {
         return Boolean.TRUE.equals(stomachLootEnabled.get()) ? stomachLootChance.get() : 0;
     }
 
-    public static boolean getVillageStructuresEnabled() {
-        return villageStructuresEnabled.get();
-    }
-
-    public static int getVillageStructuresWeight() {
-        return villageStructuresWeight.get();
-    }
-
     /**
      * Checks if the debugging mode for the cheese wheel and curds blocks is enabled.
      *
@@ -181,4 +181,23 @@ public class GrowthcraftMilkConfig {
     public static boolean isCheeseDebugEnabled() {
         return cheeseDebugEnabled.get();
     }
+
+    /**
+     * exception: allow beverages even if the module is disabled
+     */
+    public static boolean getFeatureEnabledBeverages() { return featureEnabledBeverages.get(); }
+    
+    /**
+     * Retrieves the number of random ticks it takes, for a cheese wheel to age. 
+     *
+     * @return the amount of random ticks as an integer value, ranging from 0 to 240.
+     */
+    public static int getCheeseAgeTickTime() {
+        return cheeseAgeTime.get();
+    }
+
+    /**
+     * is the whole module disabled
+     */
+    public static boolean getModuleEnabled() { return moduleEnabled.get(); }
 }

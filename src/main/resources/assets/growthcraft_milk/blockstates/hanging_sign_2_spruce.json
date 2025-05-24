@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/spruce_wall_hanging_sign"
+      "model": "growthcraft_milk:block/hanging_sign_2_spruce"
     }
   }
 }

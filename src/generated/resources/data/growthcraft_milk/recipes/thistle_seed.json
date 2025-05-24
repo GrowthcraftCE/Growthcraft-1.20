@@ -1,9 +1,20 @@
 {
-  "type": "minecraft:stonecutting",
-  "count": 3,
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "conditions": [
+    {
+      "type": "growthcraft:feature_enabled",
+      "feature": "milk"
+    }
+  ],
   "group": "growthcraft_milk",
-  "ingredient": {
-    "item": "growthcraft_milk:thistle"
-  },
-  "result": "growthcraft_milk:thistle_seed"
+  "ingredients": [
+    {
+      "item": "growthcraft_milk:thistle"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "item": "growthcraft_milk:thistle_seed"
+  }
 }

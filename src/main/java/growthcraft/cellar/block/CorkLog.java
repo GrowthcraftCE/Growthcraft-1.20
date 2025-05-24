@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
-import oshi.driver.windows.perfmon.SystemInformation.ContextSwitchProperty;
 
 public class CorkLog extends GrowthcraftLogBlock{
 	public static final BooleanProperty REGROW = BooleanProperty.create("regrow");
@@ -41,20 +40,19 @@ public class CorkLog extends GrowthcraftLogBlock{
 	
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-		return this.defaultBlockState().setValue(REGROW, false);
+		return this.defaultBlockState().setValue(AXIS, pContext.getClickedFace().getAxis()).setValue(REGROW, false);
 	}
 	
 	@Override
 	public @Nullable BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
 	    if (context.getItemInHand().canPerformAction(ToolActions.AXE_STRIP)) {
 	    	if(state.is(GrowthcraftCellarBlocks.CORK_WOOD_LOG.get())) {
-	    		System.out.println("hello " + context.getClickedPos());
-	    		System.out.println("hello2 " + context.getClickedPos().relative(context.getClickedFace(), 1));
 	    		popResource(context.getLevel(), context.getClickedPos().relative(context.getClickedFace(), 1), new ItemStack(GrowthcraftCellarItems.CORK_BARK.get()));
 	    		return GrowthcraftCellarBlocks.CORK_WOOD_LOG_STRIPPED.get().defaultBlockState().setValue(AXIS, state.getValue(AXIS)).setValue(REGROW, state.getValue(REGROW));
 	    	}
 	    	if(state.is(GrowthcraftCellarBlocks.CORK_WOOD.get())) {
-	    		return GrowthcraftCellarBlocks.CORK_WOOD_STRIPPED.get().defaultBlockState().setValue(AXIS, state.getValue(AXIS));
+	    		popResource(context.getLevel(), context.getClickedPos().relative(context.getClickedFace(), 1), new ItemStack(GrowthcraftCellarItems.CORK_BARK.get()));
+	    		return GrowthcraftCellarBlocks.CORK_WOOD_STRIPPED.get().defaultBlockState().setValue(AXIS, state.getValue(AXIS)).setValue(REGROW, state.getValue(REGROW));
 	    	}
 	    }
 	return super.getToolModifiedState(state, context, toolAction, simulate);

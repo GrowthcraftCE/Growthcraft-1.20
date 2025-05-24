@@ -40,7 +40,6 @@ jobs:
         with:
           name: build-artifacts
           path: build/libs/
-
   release:
     name: Release
     runs-on: ubuntu-latest

@@ -1,6 +1,7 @@
 package growthcraft.apples.block;
 
 import growthcraft.apples.init.GrowthcraftApplesBlocks;
+import growthcraft.apples.init.config.GrowthcraftApplesConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -14,9 +15,8 @@ import java.util.List;
 
 public class AppleTreeLeaves extends LeavesBlock {
 
-    private static final int APPLE_CHECK_AREA = 3;
-    private static final int MAX_APPLES_IN_AREA = 5;
-    private static final int TICK_DELAY = 1;
+    private static final int APPLE_CHECK_AREA = GrowthcraftApplesConfig.getAppleCheckArea();
+    private static final int MAX_APPLES_IN_AREA = GrowthcraftApplesConfig.getMaxAppleInArea();
 
     public AppleTreeLeaves() {
         this(getInitProperties());

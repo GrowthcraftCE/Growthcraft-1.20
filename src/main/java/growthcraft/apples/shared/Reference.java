@@ -41,6 +41,7 @@ public class Reference {
         public static final String APPLE_TREE = "apple_tree";
 		public static final String TAG_APPLE_WOOD_LOG = "apple_wood_logs";
 		public static final String HAS_APPLE_TREE = "has_apple_tree";
+		public static final String BIG_APPLE_TREE = "big_apple_tree";
 
         private UnlocalizedName() {
             /* Disable Automatic Creation of Public Constructor */

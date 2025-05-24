@@ -53,12 +53,11 @@ public class FermentationBarrelRecipe implements Recipe<SimpleContainer> {
 
         CompoundTag tag = potionItemStack.getOrCreateTag();
         tag.putInt("color", this.color.getRGB());
-        
+        this.potionItemStack.setTag(tag);
+
         this.potionItemStack.setHoverName(
-                this.potionItemStack.getDisplayName().copy()
-                        .append(" ")
-                        .append(Component.translatable(this.outputFluidStack.getTranslationKey()))
-        ).setTag(tag);
+                Component.translatable(this.potionItemStack.getDescriptionId().replace(".effect.empty", ""), Component.translatable(this.outputFluidStack.getTranslationKey()))
+        );
     }
 
     @Override

@@ -33,16 +33,9 @@ import java.util.List;
 
 public class HopsCropBlock extends GrowthcraftCropsRopeBlock {
 
-    protected static final VoxelShape[] CUSTOM_SHAPE_BY_AGE = new VoxelShape[]{
-            Block.box(6.0D, 0.0D, 6.0D, 10.0D, 5.0D, 10.0D),
-            Block.box(6.0D, 0.0D, 6.0D, 10.0D, 5.0D, 10.0D),
-            Block.box(6.0D, 0.0D, 6.0D, 10.0D, 5.0D, 10.0D),
-            Block.box(6.0D, 0.0D, 6.0D, 10.0D, 5.0D, 10.0D),
-            Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D),
-            Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D),
-            Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D),
-            Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D)
-    };
+    protected static final VoxelShape SHAPE_SEEDLING = Block.box(6.0D, 0.0D, 6.0D, 10.0D, 5.0D, 10.0D);
+    protected static final VoxelShape SHAPE_SEEDLING_AND_ROPE = Shapes.or(KNOT_BOUNDING_BOX, SHAPE_SEEDLING);
+    protected static final VoxelShape SHAPE_POST = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
     public HopsCropBlock() {
         super();
@@ -50,16 +43,12 @@ public class HopsCropBlock extends GrowthcraftCropsRopeBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        VoxelShape ropeVoxel = super.getShape(state, worldIn, pos, context);
-
-        ArrayList<VoxelShape> voxelShapeArrayList = new ArrayList<>();
-        voxelShapeArrayList.add(CUSTOM_SHAPE_BY_AGE[state.getValue(AGE)]);
-        voxelShapeArrayList.add(ropeVoxel);
-
-        VoxelShape[] voxelShapes = new VoxelShape[voxelShapeArrayList.size()];
-        voxelShapes = voxelShapeArrayList.toArray(voxelShapes);
-
-        return Shapes.or(KNOT_BOUNDING_BOX, voxelShapes);
+        if (state.getValue(AGE) < 4) {
+            return SHAPE_SEEDLING;
+        }
+        else {
+            return SHAPE_POST;
+        }
     }
 
     @Override

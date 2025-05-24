@@ -1,7 +1,6 @@
 {
   "values": [
     "minecraft:dark_forest",
-    "minecraft:meadow",
     {
       "id": "farmersdelight:stove",
       "required": false

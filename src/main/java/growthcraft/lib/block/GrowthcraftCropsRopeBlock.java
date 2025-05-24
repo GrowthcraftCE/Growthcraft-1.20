@@ -1,6 +1,15 @@
 package growthcraft.lib.block;
 
+import java.util.ArrayList;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import growthcraft.core.block.RopeBlock;
 import growthcraft.core.block.entity.RopeBlockEntity;
+import growthcraft.core.init.GrowthcraftBlocks;
 import growthcraft.core.init.GrowthcraftTags;
 import growthcraft.lib.utils.BlockStateUtils;
 import net.minecraft.core.BlockPos;
@@ -19,7 +28,11 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -31,11 +44,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
 
 public class GrowthcraftCropsRopeBlock extends BushBlock implements BonemealableBlock {
 
@@ -294,14 +302,24 @@ public class GrowthcraftCropsRopeBlock extends BushBlock implements Bonemealable
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         return InteractionResult.PASS;
     }
-
-    @Override
-    public boolean canSurvive(@NotNull BlockState state, LevelReader level, BlockPos pos) {
-        return true;
-    }
+    
+    public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
+        BlockPos blockpos = pPos.below();
+        return pLevel.getBlockState(pPos.below()).canSustainPlant(pLevel, blockpos, Direction.UP, this) || pLevel.getBlockState(blockpos).is(this);
+     }
 
     public boolean canBeConnectedTo(BlockState state, BlockGetter world, BlockPos pos, Direction facing) {
         return BlockStateUtils.isRopeBlock(state);
     }
+    
+    //onRemove also gets called by setBlock, so we need to check if the block has actually been removed first.
+    //if the block bellow is either a crop block or a rope, we place a rope block back at the pos of the removed block
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+    	super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
 
+    	if(!pNewState.is(pState.getBlock()) && !pLevel.getBlockState(pPos.below()).canSustainPlant(pLevel, pPos.below(), Direction.UP, this)) {
+			pLevel.setBlock(pPos, ((RopeBlock)GrowthcraftBlocks.ROPE_LINEN.get()).getActualBlockState(pLevel, pPos), UPDATE_ALL);
+    	}
+    }
 }

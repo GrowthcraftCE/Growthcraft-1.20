@@ -70,7 +70,7 @@ public class GrowthcraftMilk {
     public void buildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTab() == GrowthcraftCreativeModeTabs.CREATIVE_TAB.get()) {
             GrowthcraftMilkItems.ITEMS.getEntries().forEach(itemRegistryObject -> {
-                if (!GrowthcraftMilkItems.excludeItemRegistry(itemRegistryObject.getId())) {
+                if (!GrowthcraftMilkItems.excludeItemRegistry(itemRegistryObject.get(), itemRegistryObject.getId())) {
                     event.accept(new ItemStack(itemRegistryObject.get()));
                 }
             });

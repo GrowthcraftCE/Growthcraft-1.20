@@ -47,56 +47,56 @@ public class GrowthcraftCoreGlobalLootModifiersProvider extends GlobalLootModifi
 		add("add_loot_"+ growthcraft.cellar.shared.Reference.LootTable.STRONGHOLD_CHEST_LOOT , loot(name(growthcraft.cellar.shared.Reference.LootTable.STRONGHOLD_CHEST_LOOT), LootTableIdCondition.builder(BuiltInLootTables.STRONGHOLD_CORRIDOR).or(LootTableIdCondition.builder(BuiltInLootTables.STRONGHOLD_CROSSING)).build()));
 		
 		add("grape_seeds_purple_from_grass", new AddItemReplaceSeedsModifier(new LootItemCondition[] {
-					LootItemRandomChanceCondition.randomChance(0.10f).build(),
+					LootItemRandomChanceCondition.randomChance(0.012f).build(),
 					LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.GRASS).build(),
 					ModuleLoadedLootCondition.isLoaded("grapes")
 				},
 				GrowthcraftCellarItems.GRAPE_PURPLE_SEED.get().asItem()));
 		
 		add("grape_seeds_red_from_grass", new AddItemReplaceSeedsModifier(new LootItemCondition[] {
-					LootItemRandomChanceCondition.randomChance(0.10f).build(),
+					LootItemRandomChanceCondition.randomChance(0.012f).build(),
 					LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.GRASS).build(),
 					ModuleLoadedLootCondition.isLoaded("grapes")
 				},
 				GrowthcraftCellarItems.GRAPE_RED_SEEDS.get().asItem()));
 		
 		add("grape_seeds_white_from_grass", new AddItemReplaceSeedsModifier(new LootItemCondition[] {
-					LootItemRandomChanceCondition.randomChance(0.10f).build(),
+					LootItemRandomChanceCondition.randomChance(0.012f).build(),
 					LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.GRASS).build(),
 					ModuleLoadedLootCondition.isLoaded("grapes")
 				},
 				GrowthcraftCellarItems.GRAPE_WHITE_SEEDS.get().asItem()));
 		
 		add("hops_seeds_from_grass", new AddItemModifier(new LootItemCondition[] {
-					LootItemRandomChanceCondition.randomChance(0.07f).build(),
+					LootItemRandomChanceCondition.randomChance(0.015f).build(),
 					LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.GRASS).build(),
 					ModuleLoadedLootCondition.isLoaded("cellar")
 				},
 				GrowthcraftCellarItems.HOPS_SEED.get().asItem()));
 		
 		add("yeast_bayanus_from_grass", new AddItemReplaceSeedsModifier(new LootItemCondition[] {
-					LootItemRandomChanceCondition.randomChance(0.1f).build(),
+					LootItemRandomChanceCondition.randomChance(0.020f).build(),
 					LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.GRASS).build(),
 					ModuleLoadedLootCondition.isLoaded("cellar")
 				},
 				GrowthcraftCellarItems.YEAST_BAYANUS.get().asItem()));
 		
 		add("yeast_brewers_from_grass", new AddItemReplaceSeedsModifier(new LootItemCondition[] {
-					LootItemRandomChanceCondition.randomChance(0.1f).build(),
+					LootItemRandomChanceCondition.randomChance(0.020f).build(),
 					LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.GRASS).build(),
 					ModuleLoadedLootCondition.isLoaded("cellar")
 				},
 				GrowthcraftCellarItems.YEAST_BREWERS.get().asItem()));
 		
 		add("yeast_ethereal_from_chorus_flower", new AddItemModifier(new LootItemCondition[] {
-					LootItemRandomChanceCondition.randomChance(0.2f).build(),
+					LootItemRandomChanceCondition.randomChance(0.075f).build(),
 					LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.CHORUS_FLOWER).build(),
 					ModuleLoadedLootCondition.isLoaded("cellar")
 				},
 				GrowthcraftCellarItems.YEAST_ETHEREAL.get().asItem()));
 		
 		add("yeast_lager_from_snow", new AddItemModifier(new LootItemCondition[] {
-					LootItemRandomChanceCondition.randomChance(0.1f).build(),
+					LootItemRandomChanceCondition.randomChance(0.050f).build(),
 					LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.SNOW).build(),
 					ModuleLoadedLootCondition.isLoaded("cellar")
 				},
@@ -104,7 +104,7 @@ public class GrowthcraftCoreGlobalLootModifiersProvider extends GlobalLootModifi
 		
 //		GC Milk
 		add("thistle_seeds_from_grass", new AddItemReplaceSeedsModifier(new LootItemCondition[]{
-					LootItemRandomChanceCondition.randomChance(0.15f).build(),
+					LootItemRandomChanceCondition.randomChance(0.075f).build(),
 					LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.GRASS).build(),
 					BiomeTagLootCondition.forTag(Tags.Biomes.IS_COLD_OVERWORLD),
 					ModuleLoadedLootCondition.isLoaded("milk")
@@ -136,8 +136,7 @@ public class GrowthcraftCoreGlobalLootModifiersProvider extends GlobalLootModifi
 					ModuleLoadedLootCondition.isLoaded("rice")
 				},
 				GrowthcraftRiceItems.RICE_GRAINS.get().asItem(),
-				30, 55)); // 15 stays intact
-
+				40, 50)); // 10 stays intact
 	}
 	
 	private static LootModifier loot(ResourceLocation id, LootItemCondition... cond) {

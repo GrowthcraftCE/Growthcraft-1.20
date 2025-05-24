@@ -119,7 +119,7 @@ public class GrowthcraftCellarBlocks {
 
     public static final RegistryObject<Block> CORK_WOOD = registerBlock(
             Reference.UnlocalizedName.CORK_WOOD,
-            GrowthcraftLogBlock::new
+            CorkLog::new
     );
 
     public static final RegistryObject<Block> CORK_WOOD_LOG = registerBlock(
@@ -134,7 +134,7 @@ public class GrowthcraftCellarBlocks {
 
     public static final RegistryObject<Block> CORK_WOOD_STRIPPED = registerBlock(
             Reference.UnlocalizedName.CORK_WOOD_STRIPPED,
-            GrowthcraftLogBlock::new
+            CorkLog::new
     );
     
     public static final RegistryObject<Block> CORK_TREE_LEAVES = registerBlock(

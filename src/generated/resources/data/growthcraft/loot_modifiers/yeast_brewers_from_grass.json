@@ -2,7 +2,7 @@
   "type": "growthcraft:add_item_replacing_seeds",
   "conditions": [
     {
-      "chance": 0.1,
+      "chance": 0.02,
       "condition": "minecraft:random_chance"
     },
     {

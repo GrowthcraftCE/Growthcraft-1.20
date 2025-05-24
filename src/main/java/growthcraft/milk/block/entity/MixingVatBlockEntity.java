@@ -62,18 +62,51 @@ public class MixingVatBlockEntity extends BlockEntity implements BlockEntityTick
 
     private Component customName;
 
-    private final ItemStackHandler itemStackHandler = new ItemStackHandler(4) {
+    private static class MixingVatItemStackHandler extends ItemStackHandler
+    {
+        private MixingVatItemStackHandler() {
+            super(4);
+        }
+        private BlockEntity owner;
+
+        private void setOwner(BlockEntity owner) {
+            this.owner = owner;
+        }
+
         @Override
         protected void onContentsChanged(int slot) {
-            setChanged();
+            owner.setChanged();
         }
 
         @Override
         public int getSlotLimit(int slot) {
             return 1;
         }
-    };
 
+        @Override
+        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate)
+        {
+            if (amount == 0)  return ItemStack.EMPTY;
+            validateSlotIndex(slot);
+            ItemStack existing = this.stacks.get(slot);
+            if (existing.isEmpty()) return ItemStack.EMPTY; // up to here is just copied.
+            if (slot == 3 && existing.hasCraftingRemainingItem()) return ItemStack.EMPTY; // this is why we override.
+            return super.extractItem(slot, amount, simulate);
+        }
+
+        public @NotNull ItemStack extractItemWithProperActivationItem(int slot, int amount, boolean simulate) {
+            if (slot != 3) throw new RuntimeException("Slot " + slot + " not result slot.");
+            return super.extractItem(slot, amount, simulate);
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack)
+        {
+            if (slot == 3) return false; // no insertion into result slot
+            return super.isItemValid(slot, stack);
+        }
+    };
+    private final MixingVatItemStackHandler itemStackHandler = new MixingVatItemStackHandler();
     private LazyOptional<IItemHandler> inventoryHandler = LazyOptional.empty();
 
     private final GrowthcraftFluidTank FLUID_TANK_INPUT = new GrowthcraftFluidTank(4000) {
@@ -104,6 +137,7 @@ public class MixingVatBlockEntity extends BlockEntity implements BlockEntityTick
 
         this.FLUID_TANK_INPUT.allowAnyFluid(true);
         this.FLUID_TANK_OUTPUT.allowAnyFluid(true);
+        this.itemStackHandler.setOwner(this);
 
         this.data = new ContainerData() {
             @Override
@@ -259,8 +293,9 @@ public class MixingVatBlockEntity extends BlockEntity implements BlockEntityTick
         this.activated = false;
     }
 
-    private List<MixingVatFluidRecipe> getMatchingFluidRecipes() {
-        if (level == null) return Collections.emptyList();
+    public List<MixingVatFluidRecipe> getMatchingFluidRecipes() {
+        // Fail-fast if world context or required conditions are not met
+        if (level == null || FLUID_TANK_INPUT.isEmpty() || FLUID_TANK_OUTPUT.isEmpty()) return Collections.emptyList();
 
         List<MixingVatFluidRecipe> matchingRecipes = new ArrayList<>();
 
@@ -288,34 +323,38 @@ public class MixingVatBlockEntity extends BlockEntity implements BlockEntityTick
         return matchingRecipes;
     }
 
-    private List<MixingVatItemRecipe> getMatchingItemRecipes() {
-        if (level == null) return Collections.emptyList();
-
-        List<MixingVatItemRecipe> matchingRecipes = new ArrayList<>();
-
-        // Place the input slots into a List.
-        List<ItemStack> currentItems = new ArrayList<>();
-        for (int i = 0; i < itemStackHandler.getSlots() - 1; i++) {
-            if (!itemStackHandler.getStackInSlot(i).isEmpty()) currentItems.add(itemStackHandler.getStackInSlot(i));
+    /**
+     * Returns a list of matching {@link MixingVatItemRecipe}s based on the current fluid input,
+     * non-empty item input slots, and heat source status.
+     *
+     * @return a list of matching item recipes, or an empty list if no matches are found
+     */
+    public List<MixingVatItemRecipe> getMatchingItemRecipes() {
+        // Fail-fast if world context or required conditions are not met
+        if (level == null || !FLUID_TANK_OUTPUT.isEmpty() || FLUID_TANK_INPUT.isEmpty()) {
+            return Collections.emptyList();
         }
 
-        if(!FLUID_TANK_INPUT.isEmpty() && !currentItems.isEmpty()) {
-           // Then we need to try and match a MixingVatItemRecipe.
-            List<MixingVatItemRecipe> recipes = this.level.getRecipeManager().getAllRecipesFor(
-                    MixingVatItemRecipe.Type.INSTANCE
-            );
+        // Collect non-empty item stacks from input slots (excluding the last slot)
+        List<ItemStack> currentItems = new ArrayList<>();
+        int inputSlots = itemStackHandler.getSlots() - 1;
 
-            for(MixingVatItemRecipe recipe : recipes) {
-                if (recipe.matches(
-                        this.FLUID_TANK_INPUT.getFluid(),
-                        currentItems,
-                        isHeated())
-                ) {
-                    matchingRecipes.add(recipe);
-                }
+        for (int i = 0; i < inputSlots; i++) {
+            ItemStack stack = itemStackHandler.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                currentItems.add(stack);
             }
         }
-        return matchingRecipes;
+
+        // If no valid input items, return empty list
+        if (currentItems.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Find all recipes that match the current inputs
+        return level.getRecipeManager().getAllRecipesFor(MixingVatItemRecipe.Type.INSTANCE).stream()
+                .filter(recipe -> recipe.matches(FLUID_TANK_INPUT.getFluid(), currentItems, isHeated()))
+                .toList();
     }
 
     @Nullable
@@ -475,8 +514,8 @@ public class MixingVatBlockEntity extends BlockEntity implements BlockEntityTick
      * @return boolean If the current block was activated with this check.
      */
     public boolean activateRecipe(ItemStack stack) {
-        // Fail fast if vat is already activated.
-        if(this.activated) return false;
+        // Fail fast if vat is already activated or if there is a result itemstack that still needs to be removed.
+        if(this.activated || !this.itemStackHandler.getStackInSlot(3).isEmpty()) return false;
 
         this.activated = this.getActivationTool() != null
                 && this.getActivationTool().getItem() == stack.getItem()
@@ -505,7 +544,7 @@ public class MixingVatBlockEntity extends BlockEntity implements BlockEntityTick
         if (this.getResultActivationTool() != null
                 && this.getResultActivationTool().getItem() == resultActivationTool.getItem()
         ) {
-            ItemStack itemStack = this.itemStackHandler.extractItem(
+            ItemStack itemStack = this.itemStackHandler.extractItemWithProperActivationItem(
                     3,
                     this.itemStackHandler.getStackInSlot(3).getCount(),
                     false);

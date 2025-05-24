@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import growthcraft.apiary.init.config.GrowthcraftApiaryConfig;
 import growthcraft.apples.init.config.GrowthcraftApplesConfig;
 import growthcraft.core.shared.Reference;
+import growthcraft.milk.init.config.GrowthcraftMilkConfig;
 import growthcraft.rice.init.config.GrowthcraftRiceConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
@@ -16,7 +17,7 @@ import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 * Will be registrated as growthcraft:feature_enabled    (type)
 * Value is called "feature" and can be "apples", "apiary", etc... - those are module names. if one is used (without slash), master switch will be considered.
 * Also values can be something like "apiary/mead". In this case, condition passes if apiary module is enabled OR if apiary is disabled (master switch) but mead exception is enabled in config.
-* Full list of sub-features:    "apiary/mead", "apiary/beverages" (alias),   "apiary/basic_wax",   "rice/beverages"
+* Full list of sub-features:    "apiary/mead", "apiary/beverages" (alias),   "apiary/basic_wax",   "rice/beverages",   "milk/beverages"
 *  */
 public class OptionalFeatureCondition implements ICondition {
     public static final ResourceLocation DEFAULT_ID = new ResourceLocation(Reference.MODID, "feature_enabled"); // normally should be unknown to this, but we'll only have one type and we need to instantiate manually for datagen. doesn't matter 1.21 will do away with this.
@@ -66,7 +67,10 @@ public class OptionalFeatureCondition implements ICondition {
             return true; // NYI. not sure if we'll be able to disable them separately from cellar. GLMs can be separate easily.
         }
         else if (feature.equals("milk")) {
-            return true; // NYI
+            return GrowthcraftMilkConfig.getModuleEnabled();
+        }
+        else if (feature.equals("milk/beverages")) {
+            return GrowthcraftMilkConfig.getModuleEnabled() || GrowthcraftMilkConfig.getFeatureEnabledBeverages();
         }
         else if (feature.equals("bamboo")) {
             return true; // NYI

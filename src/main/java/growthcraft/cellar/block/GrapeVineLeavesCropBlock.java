@@ -1,11 +1,20 @@
 package growthcraft.cellar.block;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import growthcraft.cellar.init.GrowthcraftCellarBlocks;
 import growthcraft.core.block.RopeBlock;
 import growthcraft.core.block.entity.RopeBlockEntity;
+import growthcraft.core.init.GrowthcraftBlocks;
 import growthcraft.core.init.GrowthcraftTags;
 import growthcraft.core.utils.BlockPropertiesUtils;
 import growthcraft.lib.block.GrowthcraftCropsRopeBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -13,6 +22,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -21,8 +31,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.*;
 
 public class GrapeVineLeavesCropBlock extends GrowthcraftCropsRopeBlock {
 
@@ -114,5 +122,25 @@ public class GrapeVineLeavesCropBlock extends GrowthcraftCropsRopeBlock {
 
     public GrapeVineFruitBlock getGrapeVineFruitBlock() {
         return this.grapeVineFruitBlock;
+    }
+    
+    @Override
+    public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
+    	 for (Direction direction : Direction.values()) {
+    		 BlockPos adjacentPos = pPos.relative(direction);
+    	     if(pLevel.getBlockState(adjacentPos).is(this)){
+    	    	 return true;
+    	     }
+    	 }
+    	return false;
+    }
+    
+    //similar to the GrowthcraftCropsRopeBlock#onRemove. Key Difference, a vine leave can only ever grow on rope, the planted base is a different block
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+    	super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
+    	if(!pNewState.is(pState.getBlock())) {
+    		pLevel.setBlock(pPos, ((RopeBlock)GrowthcraftBlocks.ROPE_LINEN.get()).getActualBlockState(pLevel, pPos), UPDATE_ALL);
+    	}
     }
 }

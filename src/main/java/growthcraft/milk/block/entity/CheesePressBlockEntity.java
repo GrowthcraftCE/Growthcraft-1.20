@@ -49,6 +49,18 @@ public class CheesePressBlockEntity extends BlockEntity implements BlockEntityTi
         protected void onContentsChanged(int slot) {
             setChanged();
         }
+
+        @Override
+        @NotNull
+        public ItemStack extractItem(int slot, int amount, boolean simulate)
+        {
+            if (amount == 0)  return ItemStack.EMPTY;
+            validateSlotIndex(slot);
+            ItemStack existing = this.stacks.get(slot);
+            if (existing.isEmpty()) return ItemStack.EMPTY; // up to here is just copied.
+            if (existing.hasCraftingRemainingItem()) return ItemStack.EMPTY; // this is why we override.
+            return super.extractItem(slot, amount, simulate);
+        }
     };
 
     private LazyOptional<IItemHandler> itemHandlerLazyOptional = LazyOptional.empty();
@@ -223,17 +235,14 @@ public class CheesePressBlockEntity extends BlockEntity implements BlockEntityTi
     }
 
     public void dropItems() {
-        SimpleContainer inventory = new SimpleContainer(itemStackHandler.getSlots());
-
-        for (int i = 0; i < itemStackHandler.getSlots(); i++) {
-            inventory.setItem(i, itemStackHandler.getStackInSlot(i));
+        if (this.getLevel() == null) {
+            return;
         }
-
-        Containers.dropContents(
-                Objects.requireNonNull(this.getLevel()),
-                this.worldPosition,
-                inventory
-        );
+        for (int i = 0; i < itemStackHandler.getSlots(); i++) {
+            if (! itemStackHandler.getStackInSlot(i).hasCraftingRemainingItem()) {
+                Containers.dropItemStack(this.getLevel(), this.worldPosition.getX() + 0.5d, this.worldPosition.getY() + 0.5d, this.worldPosition.getZ() + 0.5d, itemStackHandler.getStackInSlot(i));
+            } // we don't drop things that need a cloth or a bucket. sorry.
+        }
     }
 
     public ItemStackHandler getItemStackHandler() {

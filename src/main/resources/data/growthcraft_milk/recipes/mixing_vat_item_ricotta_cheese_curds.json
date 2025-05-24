@@ -21,5 +21,11 @@
   },
   "result_activation_tool": {
     "item": "growthcraft_milk:cheese_cloth"
-  }
+  },
+  "conditions": [
+    {
+      "type": "growthcraft:feature_enabled",
+      "feature": "milk"
+    }
+  ]
 }

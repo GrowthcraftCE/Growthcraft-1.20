@@ -3,7 +3,6 @@ package growthcraft.cellar.init;
 import growthcraft.cellar.shared.Reference;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
@@ -90,6 +89,7 @@ public class GrowthcraftCellarTags {
 		}
     	
     	public static final TagKey<Biome> HAS_CORK_TREE = tag(Reference.UnlocalizedName.HAS_CORK_TREE);
+    	public static final TagKey<Biome> HAS_CORK_TREE_RARE = tag(Reference.UnlocalizedName.HAS_CORK_TREE_RARE);
     	
         private static void init() {
             // Do nothing, simply instantiate static variables

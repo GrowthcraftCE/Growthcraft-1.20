@@ -5,8 +5,7 @@ import java.util.concurrent.CompletableFuture;
 
 import growthcraft.apples.shared.Reference;
 import growthcraft.apples.world.GrowthcraftApplesBiomeModifiers;
-import growthcraft.apples.world.GrowthcraftApplesConfiguredFeatures;
-import growthcraft.apples.world.GrowthcraftApplesPlacedFeatures;
+import growthcraft.apples.world.GrowthcraftApplesFeatures;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
@@ -16,8 +15,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class GrowthcraftApplesWorldGenProvider extends DatapackBuiltinEntriesProvider{
 	public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
-			.add(Registries.CONFIGURED_FEATURE, GrowthcraftApplesConfiguredFeatures::bootstrap)
-			.add(Registries.PLACED_FEATURE, GrowthcraftApplesPlacedFeatures::bootstrap)
+			.add(Registries.CONFIGURED_FEATURE, GrowthcraftApplesFeatures.Configured::init)
+			.add(Registries.PLACED_FEATURE, GrowthcraftApplesFeatures.Placed::init)
 			.add(ForgeRegistries.Keys.BIOME_MODIFIERS, GrowthcraftApplesBiomeModifiers::bootstrap);
 	
 	public GrowthcraftApplesWorldGenProvider(PackOutput output, CompletableFuture<Provider> registries) {

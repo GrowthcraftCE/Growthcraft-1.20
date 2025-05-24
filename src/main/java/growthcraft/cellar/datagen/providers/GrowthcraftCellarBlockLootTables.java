@@ -8,6 +8,7 @@ import growthcraft.apples.init.GrowthcraftApplesBlocks;
 import growthcraft.cellar.init.GrowthcraftCellarBlockEntities;
 import growthcraft.cellar.init.GrowthcraftCellarBlocks;
 import growthcraft.cellar.init.GrowthcraftCellarFluids;
+import growthcraft.cellar.init.GrowthcraftCellarItems;
 import growthcraft.lib.utils.FormatUtils;
 import net.minecraft.data.loot.packs.VanillaBlockLoot;
 import net.minecraft.resources.ResourceLocation;
@@ -45,6 +46,9 @@ public class GrowthcraftCellarBlockLootTables extends VanillaBlockLoot{
 		dropSelf(GrowthcraftCellarBlocks.CORK_WOOD_LOG_STRIPPED.get());
 		dropSelf(GrowthcraftCellarBlocks.CORK_WOOD_STRIPPED.get());
 		dropSelf(GrowthcraftCellarBlocks.CORK_COASTER.get());
+		dropOther(GrowthcraftCellarBlocks.PURPLE_GRAPE_VINE.get(), GrowthcraftCellarItems.GRAPE_PURPLE_SEED.get());
+		dropOther(GrowthcraftCellarBlocks.WHITE_GRAPE_VINE.get(), GrowthcraftCellarItems.GRAPE_WHITE_SEEDS.get());
+		dropOther(GrowthcraftCellarBlocks.RED_GRAPE_VINE.get(), GrowthcraftCellarItems.GRAPE_RED_SEEDS.get());
 	}
 	
     @Override
@@ -58,9 +62,6 @@ public class GrowthcraftCellarBlockLootTables extends VanillaBlockLoot{
         allBlocks.remove(GrowthcraftCellarBlocks.PURPLE_GRAPE_VINE_FRUIT.get());
         allBlocks.remove(GrowthcraftCellarBlocks.RED_GRAPE_VINE_FRUIT.get());
         allBlocks.remove(GrowthcraftCellarBlocks.WHITE_GRAPE_VINE_FRUIT.get());
-        allBlocks.remove(GrowthcraftCellarBlocks.WHITE_GRAPE_VINE.get());
-        allBlocks.remove(GrowthcraftCellarBlocks.RED_GRAPE_VINE.get());
-        allBlocks.remove(GrowthcraftCellarBlocks.PURPLE_GRAPE_VINE.get());
         allBlocks.remove(GrowthcraftCellarBlocks.HOPS_VINE.get());
         allBlocks.removeAll(GrowthcraftCellarFluids.FLUIDS.getEntries().stream().map(RegistryObject::get).collect(Collectors.toList()));
 

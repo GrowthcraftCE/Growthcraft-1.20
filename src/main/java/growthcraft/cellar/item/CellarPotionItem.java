@@ -93,7 +93,7 @@ public class CellarPotionItem extends GrowthcraftItem {
 
     @Override
     public @NotNull String getDescriptionId(ItemStack stack) {
-        return PotionUtils.getPotion(stack).getName(this.getDescriptionId() + ".effect.");
+        return this.getDescriptionId() + ".effect.empty";  // barrel interaction will override in (barrel recipe class)
     }
 
     @Override
@@ -102,13 +102,17 @@ public class CellarPotionItem extends GrowthcraftItem {
     }
 
     @Override
-    public boolean isFoil(ItemStack stack) {
-        return super.isFoil(stack) || !PotionUtils.getMobEffects(stack).isEmpty();
-    }
-
-    @Override
     public int getColor(ItemStack itemStack, int layer) {
     	CompoundTag tag = itemStack.getTag();
-    	return layer == 0 ? tag != null ? itemStack.getTag().getInt("color") : 0xFFFFFF : 0xFFFFF;
+        if (layer == 0)
+        {
+            // layer == 0 means liquid
+            return tag != null ? itemStack.getTag().getInt("color") : 0xFFFFFF; // no reasonable color if one is missing.
+        }
+        else
+        {
+            // layer == 1 means foam
+            return 0xFFFFFF;
+        }
     }
 }

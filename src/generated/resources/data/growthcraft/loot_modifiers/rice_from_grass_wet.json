@@ -33,6 +33,6 @@
     }
   ],
   "item": "growthcraft_rice:rice_grains",
-  "percent_to_replace": 30,
-  "percent_to_void": 55
+  "percent_to_replace": 40,
+  "percent_to_void": 50
 }

@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class GrowthcraftMilkBlockEntityRenderers {
+
     @SubscribeEvent
     public static void register(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(GrowthcraftMilkBlockEntities.PANCHEON_BLOCK_ENTITY.get(), context -> new PancheonBlockEntityRenderer());

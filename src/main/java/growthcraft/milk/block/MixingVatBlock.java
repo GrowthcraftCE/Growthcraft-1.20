@@ -40,6 +40,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static net.minecraft.world.phys.shapes.BooleanOp.OR;
 
@@ -137,18 +139,39 @@ public class MixingVatBlock extends BaseEntityBlock {
         FluidTank inputFluidTank = blockEntity.getFluidTank("input");
         FluidTank reagentFluidTank = blockEntity.getFluidTank("reagent");
 
-        if(GrowthcraftMilkConfig.isMixingDebugEnabled()) {
+        if (GrowthcraftMilkConfig.isMixingDebugEnabled()) {
+            List<String> recipeIds = blockEntity.getMatchingItemRecipes()
+                    .stream()
+                    .map(recipe -> recipe.getId().toString())
+                    .collect(Collectors.toList());
+
+            recipeIds.addAll(
+                    blockEntity.getMatchingFluidRecipes()
+                            .stream()
+                            .map(recipe -> recipe.getId().toString())
+                            .toList()
+            );
+
+            String formattedRecipeIds = recipeIds.isEmpty()
+                    ? "None"
+                    : recipeIds.stream()
+                    .map(id -> "\t" + id) // Prefix each ID with a tab
+                    .collect(Collectors.joining("\n")); // Join with newlines
+
             GrowthcraftMilk.LOGGER.warn(String.format(
-                    "Mixing Vat Debugging is Enabled\nMixing Vat [%d, %d, %d] (heated = %s, clock = %d/%d)\nActivated with %s (Activation Tools = [%s, %s]).\nBlock Inventory: \n\tItems [%s, %s, %s, %s], \n\tFluids [%s(%dmb), %s(%dmb)].",
-                    blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockEntity.isHeated(), blockEntity.getTickClock("current"),
-                    blockEntity.getTickClock("max"), player.getItemInHand(interactionHand), blockEntity.getActivationTool().toString(),
+                    "Mixing Vat Debugging is Enabled\nMixing Vat [%d, %d, %d] (heated = %s, clock = %d/%d)\nActivated with %s (Activation Tools = [%s, %s]).\nBlock Inventory: \n\tItems [%s, %s, %s, %s], \n\tFluids [%s(%dmb), %s(%dmb)].\nMatching Recipes:\n%s",
+                    blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockEntity.isHeated(),
+                    blockEntity.getTickClock("current"), blockEntity.getTickClock("max"),
+                    player.getItemInHand(interactionHand), blockEntity.getActivationTool().toString(),
                     blockEntity.getResultActivationTool().toString(),
                     blockEntity.getInventoryHandler().getStackInSlot(0), blockEntity.getInventoryHandler().getStackInSlot(1),
                     blockEntity.getInventoryHandler().getStackInSlot(2), blockEntity.getInventoryHandler().getStackInSlot(3),
                     blockEntity.getFluidTank(0).getFluid().getFluid().getFluidType(), blockEntity.getFluidTank(0).getFluidAmount(),
-                    blockEntity.getFluidTank(1).getFluid().getFluid().getFluidType(), blockEntity.getFluidTank(1).getFluidAmount()
+                    blockEntity.getFluidTank(1).getFluid().getFluid().getFluidType(), blockEntity.getFluidTank(1).getFluidAmount(),
+                    formattedRecipeIds
             ));
         }
+
 
         // Try to do fluid handling first.
         if (player.getItemInHand(interactionHand)
@@ -169,11 +192,11 @@ public class MixingVatBlock extends BaseEntityBlock {
                 int amount = blockEntity.getFluidTank(0).getFluidAmount();
                 int remainingFill = capacity - amount;
 
-                if(blockEntity.getFluidTank(0).isEmpty()
+                if (blockEntity.getFluidTank(0).isEmpty()
                         || (remainingFill >= 1000
                         && blockEntity.getFluidStackInTank(0).getFluid().getFluidType() == GrowthcraftMilkFluids.MILK.source.get().getFluidType())
                 ) {
-                    FluidStack fluidStack = new FluidStack( GrowthcraftMilkFluids.MILK.source.get().getSource(), 1000);
+                    FluidStack fluidStack = new FluidStack(GrowthcraftMilkFluids.MILK.source.get().getSource(), 1000);
                     blockEntity.getFluidTank(0).fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
                     player.setItemInHand(interactionHand, new ItemStack(Items.BUCKET));
                 }
@@ -192,15 +215,15 @@ public class MixingVatBlock extends BaseEntityBlock {
                 || player.getItemInHand(interactionHand).is(blockEntity.getResultActivationTool().getItem()))
         ) {
             // Try and activate the recipe.
-            if(blockEntity.activateRecipe(player.getItemInHand(interactionHand))) {
+            if (blockEntity.activateRecipe(player.getItemInHand(interactionHand))) {
                 if (GrowthcraftMilkConfig.isConsumeMixingVatActivator())
                     player.getItemInHand(interactionHand).shrink(1);
                 return InteractionResult.SUCCESS;
             }
 
             // Process the Cheese Curds extraction.
-            if(!blockEntity.getInventoryHandler().getStackInSlot(3).isEmpty()
-                && blockEntity.activateResult(player, player.getItemInHand(interactionHand))) {
+            if (!blockEntity.getInventoryHandler().getStackInSlot(3).isEmpty()
+                    && blockEntity.activateResult(player, player.getItemInHand(interactionHand))) {
                 player.getItemInHand(interactionHand).shrink(1);
                 return InteractionResult.SUCCESS;
             }

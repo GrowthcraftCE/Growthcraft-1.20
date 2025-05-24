@@ -108,7 +108,7 @@ public class EmiPlugin implements dev.emi.emi.api.EmiPlugin
                                                            .leftInput(EmiIngredient.of(Ingredient.of(baseBlock)))
                                                            .rightInput(EmiIngredient.of(Ingredient.of(bookStack)), true)
                                                            .output(EmiStack.of(item))
-                                                           .id(new ResourceLocation(growthcraft.rice.shared.Reference.MODID, "book_recipe_" + (counter++)))
+                                                           .id(new ResourceLocation(growthcraft.cellar.shared.Reference.MODID, "book_recipe_" + (counter++)))
                                                            .build());
         }
     }
@@ -122,7 +122,7 @@ public class EmiPlugin implements dev.emi.emi.api.EmiPlugin
                                                            .leftInput(EmiIngredient.of(Ingredient.of(GrowthcraftCellarBlocks.FERMENTATION_BARREL_OAK.get())))
                                                            .rightInput(EmiIngredient.of(Ingredient.of(Items.GLASS_BOTTLE)), false)
                                                            .output(EmiStack.of(bottle))
-                                                           .id(new ResourceLocation(growthcraft.rice.shared.Reference.MODID, "book_recipe_" + (counter++)))
+                                                           .id(new ResourceLocation(growthcraft.cellar.shared.Reference.MODID, "bottle_recipe_" + (counter++)))
                                                            .build());
         }
     }

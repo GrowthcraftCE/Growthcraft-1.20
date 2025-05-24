@@ -1,5 +1,6 @@
 package growthcraft.milk.init;
 
+import growthcraft.core.init.config.OptionalFeatureCondition;
 import growthcraft.lib.item.GrowthcraftBowlFoodItem;
 import growthcraft.lib.item.GrowthcraftFoodItem;
 import growthcraft.lib.item.GrowthcraftItem;
@@ -9,17 +10,17 @@ import growthcraft.milk.item.CheeseCurdsDrainedItem;
 import growthcraft.milk.item.MilkingBucketItem;
 import growthcraft.milk.item.ThistleSeedItem;
 import growthcraft.milk.shared.Reference;
-import growthcraft.rice.init.GrowthcraftRiceItems;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class GrowthcraftMilkItems {
@@ -90,9 +91,9 @@ public class GrowthcraftMilkItems {
             () -> new GrowthcraftFoodItem(8, 0.5F, 64)
     );
 
-    public static final RegistryObject<GrowthcraftFoodItem> CHEESE_RICOTTA_SLICE = ITEMS.register(
+    public static final RegistryObject<GrowthcraftBowlFoodItem> CHEESE_RICOTTA_SLICE = ITEMS.register(
             CheeseUtils.getCheeseNames(Reference.UnlocalizedName.RICOTTA).get(CheeseUtils.SLICE),
-            () -> new GrowthcraftFoodItem(4, 0.4F, 16)
+            () -> new GrowthcraftBowlFoodItem(4, 0.4F, 16)
     );
 
     public static final RegistryObject<GrowthcraftBowlFoodItem> ICE_CREAM_APPLE = ITEMS.register(
@@ -250,10 +251,14 @@ public class GrowthcraftMilkItems {
         ComposterBlock.COMPOSTABLES.put(GrowthcraftMilkItems.THISTLE.get(), f1);
     }
 
-    public static boolean excludeItemRegistry(ResourceLocation registryName) {
-        ArrayList<String> excludeItems = new ArrayList<>();
-        //excludeItems.add(Reference.MODID + ":" + Reference.UnlocalizedName.APPLE_TREE_FRUIT);
-        return excludeItems.contains(registryName.toString());
+    public static boolean excludeItemRegistry(@NotNull Item item, ResourceLocation registryName) {
+        if (item instanceof BucketItem) {
+            return OptionalFeatureCondition.testModuleOrModuleFeature("milk/beverages");
+        }
+        if (!OptionalFeatureCondition.testModuleOrModuleFeature("milk")) {
+            return true;
+        }
+        return false;
     }
 
     private GrowthcraftMilkItems() {

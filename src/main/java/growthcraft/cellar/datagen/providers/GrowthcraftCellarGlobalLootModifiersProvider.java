@@ -19,7 +19,11 @@ public class GrowthcraftCellarGlobalLootModifiersProvider extends GlobalLootModi
 	public GrowthcraftCellarGlobalLootModifiersProvider(PackOutput output) {
 		super(output, Reference.MODID);
 	}
-	
+
+
+	// NOT USED.
+	// see the similar class in core module.
+
 	@Override
 	protected void start() {
 		add("add_loot_"+ Reference.LootTable.PILLAGER_OUTPOST_CHEST_LOOT , loot(name(Reference.LootTable.PILLAGER_OUTPOST_CHEST_LOOT), LootTableIdCondition.builder(BuiltInLootTables.PILLAGER_OUTPOST).build()));
@@ -69,9 +73,12 @@ public class GrowthcraftCellarGlobalLootModifiersProvider extends GlobalLootModi
 				LootItemRandomChanceCondition.randomChance(0.02f).build(),
 				LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.SNOW).build()}, 
 				GrowthcraftCellarItems.YEAST_LAGER.get().asItem()));
-		
 	}
-	
+
+	// again...
+	// NOT USED.
+	// see the similar class in core module.
+
 	private static LootModifier loot(ResourceLocation id, LootItemCondition... cond) {
 		return new AddLootTableModifier(cond, id);
 	}
